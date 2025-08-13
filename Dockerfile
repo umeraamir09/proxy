@@ -1,8 +1,13 @@
-FROM dannydirect/tinyproxy:latest
+FROM alpine:latest
 
-# Optional: set up basic authentication
-ENV TINYPROXY_USER=proxyuser
-ENV TINYPROXY_PASSWORD=proxypass
+# Install tinyproxy
+RUN apk --no-cache add tinyproxy
 
-# Listen on port 8888
+# Copy our tinyproxy configuration
+COPY tinyproxy.conf /etc/tinyproxy/tinyproxy.conf
+
+# Expose proxy port
 EXPOSE 8888
+
+# Run tinyproxy in foreground (so Docker keeps it alive)
+CMD ["tinyproxy", "-d"]
